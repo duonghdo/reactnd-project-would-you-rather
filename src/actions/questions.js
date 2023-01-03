@@ -1,4 +1,5 @@
 import { saveQuestion, saveQuestionAnswer } from '../utils/api'
+import { addUserAnswer, addUserQuestion } from './users'
 
 export const RECEIVE_QUESTIONS = 'RECEIVE_QUESTIONS'
 export const ADD_QUESTION = 'ADD_QUESTION'
@@ -23,6 +24,7 @@ export function handleAddQuestion (question) {
         return saveQuestion(question)
             .then((question) => {
                 dispatch(addQuestion(question))
+                dispatch(addUserQuestion(question))
             })
             .catch((e) => {
                 console.warn('Error saving question: ', e)
@@ -31,11 +33,11 @@ export function handleAddQuestion (question) {
     }
 }
 
-function addQuestionAnswer ({ qid, authedUser, answer }) {
+function addQuestionAnswer ({ authedUser, qid, answer }) {
     return {
         type: ADD_QUESTION_ANSWER,
-        qid,
         authedUser,
+        qid,
         answer
     }
 }
@@ -43,12 +45,14 @@ function addQuestionAnswer ({ qid, authedUser, answer }) {
 export function handleAddQuestionAnswer (questionAnswer) {
     return (dispatch) => {
         return saveQuestionAnswer(questionAnswer)
-            .then((questionAnswer) => {
+            .then(() => {
+                console.log('API OK', questionAnswer)
                 dispatch(addQuestionAnswer(questionAnswer))
+                dispatch(addUserAnswer(questionAnswer))
             })
             .catch((e) => {
-                console.warn('Error saving question answer: ', e)
-                alert('Error saving question answer.')
+                console.warn('Error saving answer: ', e)
+                alert('Error saving answer.')
             })
     }
 }
