@@ -34,6 +34,7 @@ class Answer extends Component {
         return (
             <div className='answer'>
                 <p>Asked by {users[question.author].name}</p>
+                <img src={users[question.author].avatarURL} alt='' loading='lazy' height={50} style={{padding:5}}/>
                 <strong>Would you rather</strong>
                 <form onSubmit={this.handleSubmit}>
                     <input
