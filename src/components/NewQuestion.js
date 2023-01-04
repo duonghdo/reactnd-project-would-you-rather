@@ -41,10 +41,6 @@ class NewQuestion extends Component {
 
     render() {
         const { option1, option2, toHome } = this.state
-        const { authedUser } = this.props
-        if (authedUser === null) {
-            return <Navigate to='/login' replace/>
-        }
 
         if (toHome === true) {
             return <Navigate to='/'/>

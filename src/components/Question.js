@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { useParams } from 'react-router-dom'
 import { connect } from  'react-redux'
-import { Navigate } from 'react-router-dom'
 import Answer from './Answer'
 import Result from './Result'
 
@@ -16,15 +15,15 @@ export function withRouter(Children){
 class Question extends Component {
     render() {
         const { users, authedUser, questions, question_id } = this.props
-        if (authedUser === null) {
-            return <Navigate to='/login' replace/>
-        }
         const userAnswers = users[authedUser].answers
-        const question = questions[question_id]
+        let question = null
+        if (Object.keys(questions).includes(question_id)) {
+            question = questions[question_id]
+        }
         if (question === null) {
             return <p>This page does not exist</p>
         }
-        
+
         return (
             Object.keys(userAnswers).includes(question.id)
                 ? <Result question={question}/>

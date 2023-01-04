@@ -1,14 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from  'react-redux'
-import { Navigate } from 'react-router-dom'
 
 class Leaderboard extends Component {
     render() {
-        const { uid, users, authedUser } = this.props
-
-        if (authedUser === null) {
-            return <Navigate to='/login' replace/>
-        }
+        const { uid, users } = this.props
 
         return (
             <ul className='leaderboard'>
@@ -32,12 +27,11 @@ class Leaderboard extends Component {
     }
 }
 
-function mapStateToProps({ users, authedUser }) {
+function mapStateToProps({ users }) {
     const userScore = (id) => Object.keys(users[id].answers).length + users[id].questions.length
     return {
         uid: Object.keys(users).sort((a, b) => userScore(b) - userScore(a)),
-        users,
-        authedUser
+        users
     }
 }
 

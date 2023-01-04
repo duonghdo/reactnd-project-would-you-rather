@@ -9,6 +9,7 @@ import NewQuestion from './NewQuestion'
 import Login from './Login'
 import { LoadingBar } from 'react-redux-loading-bar'
 import Question from './Question'
+import RequireAuth from './RequireAuth'
 
 class App extends Component {
     componentDidMount() {
@@ -22,10 +23,10 @@ class App extends Component {
                     <div className="container">
                         <Nav/>
                         <Routes>
-                            <Route exact path='/' element={<Home/>}/>
-                            <Route path='/add' element={<NewQuestion/>}/>
-                            <Route path='/leaderboard' element={<Leaderboard/>}/>
-                            <Route path='/questions/:question_id' element={<Question/>}/>
+                            <Route exact path='/' element={<RequireAuth><Home/></RequireAuth>}/>
+                            <Route path='/add' element={<RequireAuth><NewQuestion/></RequireAuth>}/>
+                            <Route path='/leaderboard' element={<RequireAuth><Leaderboard/></RequireAuth>}/>
+                            <Route path='/questions/:question_id' element={<RequireAuth><Question/></RequireAuth>}/>
                             <Route path='/login' element={<Login/>}/>
                         </Routes>    
                     </div>

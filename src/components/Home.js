@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from  'react-redux'
-import { Link, Navigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 class Home extends Component {
     state = {
@@ -17,10 +17,7 @@ class Home extends Component {
 
     render() {
         const { unanswered } = this.state
-        const { sortedAnswered, sortedUnanswered, users, authedUser } = this.props
-        if (authedUser === null) {
-            return <Navigate to='/login' replace/>
-        }
+        const { sortedAnswered, sortedUnanswered, users } = this.props
 
         return (
             <div className='home'>
@@ -69,8 +66,7 @@ function mapStateToProps({ questions, users, authedUser }) {
     return {
         sortedAnswered,
         sortedUnanswered,
-        users,
-        authedUser
+        users
     }
 }
 

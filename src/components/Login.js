@@ -1,67 +1,50 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Navigate } from 'react-router-dom'
+import React, { useState } from 'react'
+import { connect, useDispatch } from 'react-redux'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { setAuthedUser } from '../actions/authedUser'
 
-class Login extends Component {
-    state = {
-        user: '',
-        toHome: false,
+function Login({ users }) {
+    const [user, setUser] = useState('')
+    const { state } = useLocation()
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const handleChange = (e) => {
+        const selected = e.target.value
+        setUser(selected)
     }
 
-    handleChange = (e) => {
-        const user = e.target.value
-        this.setState({ user })
-    }
-
-    handleSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault()
-
-        const { user } = this.state
-        const { dispatch } = this.props
-
         dispatch(setAuthedUser(user))
-
-        this.setState(() => ({
-            user: user,
-            toHome: true,
-        }))
+        navigate(state?.path || '/')
     }
 
-    render() {
-        const { user, toHome } = this.state
-        const { users } = this.props
-
-        if (toHome === true) {
-            return <Navigate to='/'/>
-        }
-
-        return (
+    return (
+        <div>
             <div>
-                <div>
-                    <h3>Welcome to the Would You Rather App</h3>
-                    <p>Please sign in to continue</p>
-                </div>
-                <div>
-                    <form className='login' onSubmit={this.handleSubmit}>
-                        <select value={user} onChange={this.handleChange}>
-                            <option value="" disabled>Select User</option>
-                            { Object.values(users).map((u) => (
-                                <option value={u.id} key={u.id}>{u.name}</option>
-                            ))}
-                        </select>
-                        <div>&nbsp;</div>
-                        <button
-                            className='btn'
-                            type='submit'
-                            disabled={user === ''}>
-                            Submit
-                        </button>
-                    </form>
-                </div>
+                <h3>Welcome to the Would You Rather App</h3>
+                <p>Please sign in to continue</p>
             </div>
-        )
-    }
+            <div>
+                <form className='login' onSubmit={handleSubmit}>
+                    <select value={user} onChange={handleChange}>
+                        <option value="" disabled>Select User</option>
+                        { Object.values(users).map((u) => (
+                            <option value={u.id} key={u.id}>{u.name}</option>
+                        ))}
+                    </select>
+                    <div>&nbsp;</div>
+                    <button
+                        className='btn'
+                        type='submit'
+                        disabled={user === ''}>
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    )
 }
 
 function mapStateToProps({ users }) {
