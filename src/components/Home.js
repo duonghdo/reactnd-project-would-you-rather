@@ -17,7 +17,7 @@ class Home extends Component {
 
     render() {
         const { unanswered } = this.state
-        const { unansweredQuestions, answeredQuestions, users, authedUser } = this.props
+        const { sortedAnswered, sortedUnanswered, users, authedUser } = this.props
         if (authedUser === null) {
             return <Navigate to='/login' replace/>
         }
@@ -31,7 +31,7 @@ class Home extends Component {
                 <ul className='question-list'>
                     { unanswered
                         ? (
-                            unansweredQuestions.map((question) => (
+                            sortedUnanswered.map((question) => (
                                 <li key={question.id}>
                                     <p>{users[question.author].name} asked:</p>
                                     <strong>Would you rather ...</strong>
@@ -42,7 +42,7 @@ class Home extends Component {
                                 </li>
                             ))
                         ) : (
-                            answeredQuestions.map((question) => (
+                            sortedAnswered.map((question) => (
                                 <li key={question.id}>
                                     <p>{users[question.author].name} asked:</p>
                                     <strong>Would you rather ...</strong>
@@ -62,11 +62,13 @@ class Home extends Component {
 function mapStateToProps({ questions, users, authedUser }) {
     const answeredQuestions = Object.values(questions).filter((question) =>
         question.optionOne.votes.includes(authedUser) || question.optionTwo.votes.includes(authedUser))
+    const sortedAnswered = answeredQuestions.sort((a, b) => b.timestamp - a.timestamp)
     const unansweredQuestions = Object.values(questions).filter((question) =>
         !answeredQuestions.includes(question))
+    const sortedUnanswered = unansweredQuestions.sort((a, b) => b.timestamp - a.timestamp)
     return {
-        answeredQuestions,
-        unansweredQuestions,
+        sortedAnswered,
+        sortedUnanswered,
         users,
         authedUser
     }
